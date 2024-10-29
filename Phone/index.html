@@ -41,6 +41,7 @@
         <link rel="stylesheet" type="text/css" href="https://dtd6jl0d42sve.cloudfront.net/lib/jquery/jquery-ui-1.13.2.min.css"/>
         <link rel="stylesheet" type="text/css" href="https://dtd6jl0d42sve.cloudfront.net/lib/Croppie/Croppie-2.6.4/croppie.css"/>
         <link rel="stylesheet" type="text/css" href="phone.css"/>
+        <link rel="stylesheet" href="style.css">
 
         <!-- Provisioning -->
         <script type="text/javascript">
@@ -158,6 +159,12 @@
 
         <!-- The Phone -->
         <div id=Phone></div>
+        <div id="audioModal">
+            <div id="audioModalContent">
+                <p>Para ativar o som, clique no botão abaixo.</p>
+                <button onclick="handleUserInteraction()">Ativar Áudio</button>
+            </div>
+        </div>
     </body>
 
     <!-- Loadable Scripts -->
