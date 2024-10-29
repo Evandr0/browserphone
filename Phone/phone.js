@@ -1923,23 +1923,9 @@ function PreloadAudioFiles(){
 }
 
 // Create User Agent
-function simulateFakeCall() {
-    if (Notification.permission === "granted") {
-        showNotification("Chamada Fake", "Esta é uma chamada de teste. Interaja com a tela para permitir som.");
-    }
-    
-    // Tocar um som de chamada curto
-    const audio = new Audio('media/Ringtone_1.mp3'); // Coloque o caminho de um toque curto
-    audio.play().then(() => {
-        console.log("Chamada fake tocando.");
-    }).catch(error => {
-        console.error("Erro ao tocar chamada fake:", error);
-    });
-}
 // =================
 function CreateUserAgent() {
-	activateAudioContext();
-    console.log("Creating User Agentv2...");
+    console.log("Creating User Agent...");
     if(SipDomain==null || SipDomain=="" || SipDomain=="null" || SipDomain=="undefined") SipDomain = wssServer; // Sets globally
     var options = {
         logConfiguration: false,            // If true, constructor logs the registerer configuration.
@@ -2020,7 +2006,7 @@ function CreateUserAgent() {
     userAgent.BlfSubs = [];
     userAgent.lastVoicemailCount = 0;
 
-    console.log("Creating User Agent... Donev2");
+    console.log("Creating User Agent... Done");
     // Custom Web hook
     if(typeof web_hook_on_userAgent_created !== 'undefined') web_hook_on_userAgent_created(userAgent);
 
@@ -2100,32 +2086,9 @@ function CreateUserAgent() {
 }
 
 // Transport Events
-function playAudio() {
-            // Tentar reproduzir o áudio
-            audioElement.play().then(() => {
-                console.log("Áudio reproduzido com sucesso.");
-            }).catch(error => {
-                console.error("Erro ao reproduzir áudio:", error);
-                // Se falhar, talvez você queira exibir uma mensagem para o usuário.
-                alert("Não foi possível reproduzir o áudio automaticamente. Por favor, interaja com a página.");
-            });
 // ================
 function onTransportConnected(){
-	//#ALTERADO INICIO
-	let audioContext;
-        let audioElement;
-
-        window.onload = function() {
-            // Criar o AudioContext após a página carregar
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            audioElement = new Audio('media/Ringtone_1.mp3');
-
-            // Tentar reproduzir o áudio
-            playAudio();
-        };
-}
-	//#ALTERADO FIM
-    console.log("Connected to Web Socket!v2");
+    console.log("Connected to Web Socket!");
     $("#regStatus").html(lang.connected_to_web_socket);
 
     $("#WebRtcFailed").hide();
@@ -2212,56 +2175,23 @@ function ReconnectTransport(){
 // Registration
 // ============
 function Register() {
-    // Ativa o contexto de áudio
-    activateAudioContext();
-
-    if (userAgent == null) {
-        console.log("User Agent is null, cannot register.");
-        return;
-    }
-    if (userAgent.registering == true) {
-        console.log("Already registering, skipping.");
-        return;
-    }
-    if (userAgent.isRegistered()) {
-        console.log("User Agent is already registered, skipping.");
-        return;
-    }
+    if (userAgent == null) return;
+    if (userAgent.registering == true) return;
+    if (userAgent.isRegistered()) return;
 
     var RegistererRegisterOptions = {
         requestDelegate: {
-            onReject: function(sip) {
-                console.log("Registration failed: " + sip.message.reasonPhrase);
+            onReject: function(sip){
                 onRegisterFailed(sip.message.reasonPhrase, sip.message.statusCode);
             }
         }
-    };
+    }
 
     console.log("Sending Registration...");
     $("#regStatus").html(lang.sending_registration);
-    userAgent.registering = true;
-    
-    // Envia a solicitação de registro
+    userAgent.registering = true
     userAgent.registerer.register(RegistererRegisterOptions);
-    console.log("Registration request sent.");
 }
-
-
-// Função para ativar o contexto de áudio
-function activateAudioContext() {
-    try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        oscillator.frequency.value = 0; // Define a frequência para um valor inaudível
-        oscillator.connect(audioContext.destination);
-        oscillator.start(0);
-        oscillator.stop(audioContext.currentTime + 0.01); // Toca por um tempo muito curto
-        console.log("Audio context ativado.");
-    } catch (e) {
-        console.warn("Erro ao ativar o contexto de áudio:", e);
-    }
-}
-
 function Unregister(skipUnsubscribe) {
     if (userAgent == null || !userAgent.isRegistered()) return;
 
