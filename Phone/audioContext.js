@@ -4,7 +4,7 @@ let audioElement;
 window.onload = function() {
     // Criar o AudioContext após a página carregar
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    audioElement = new Audio('caminho/para/seu/audio.mp3');
+    audioElement = new Audio('media/Ringtone_1.mp3');
 
     // Tentar reproduzir o áudio
     playAudio();
