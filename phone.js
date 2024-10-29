@@ -1923,6 +1923,19 @@ function PreloadAudioFiles(){
 }
 
 // Create User Agent
+function simulateFakeCall() {
+    if (Notification.permission === "granted") {
+        showNotification("Chamada Fake", "Esta é uma chamada de teste. Interaja com a tela para permitir som.");
+    }
+    
+    // Tocar um som de chamada curto
+    const audio = new Audio('media/Ringtone_1.mp3'); // Coloque o caminho de um toque curto
+    audio.play().then(() => {
+        console.log("Chamada fake tocando.");
+    }).catch(error => {
+        console.error("Erro ao tocar chamada fake:", error);
+    });
+}
 // =================
 function CreateUserAgent() {
 	activateAudioContext();
@@ -2087,9 +2100,32 @@ function CreateUserAgent() {
 }
 
 // Transport Events
+function playAudio() {
+            // Tentar reproduzir o áudio
+            audioElement.play().then(() => {
+                console.log("Áudio reproduzido com sucesso.");
+            }).catch(error => {
+                console.error("Erro ao reproduzir áudio:", error);
+                // Se falhar, talvez você queira exibir uma mensagem para o usuário.
+                alert("Não foi possível reproduzir o áudio automaticamente. Por favor, interaja com a página.");
+            });
 // ================
 function onTransportConnected(){
-    console.log("Connected to Web Socket!");
+	//#ALTERADO INICIO
+	let audioContext;
+        let audioElement;
+
+        window.onload = function() {
+            // Criar o AudioContext após a página carregar
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            audioElement = new Audio('media/Ringtone_1.mp3');
+
+            // Tentar reproduzir o áudio
+            playAudio();
+        };
+}
+	//#ALTERADO FIM
+    console.log("Connected to Web Socket!v2");
     $("#regStatus").html(lang.connected_to_web_socket);
 
     $("#WebRtcFailed").hide();
