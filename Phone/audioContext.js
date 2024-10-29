@@ -1,40 +1,26 @@
 let audioContext;
-let audioElement;
+let audioElement = new Audio('media/Ringtone_1.mp3');
 
 window.onload = function() {
-    // Criar o AudioContext após a página carregar
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    audioElement = new Audio('media/Ringtone_1.mp3');
+    // Exibir uma mensagem visual ou prompt para que o usuário clique na página
+    alert("Clique em qualquer lugar da página para iniciar o áudio.");
 
-    // Configurar o AudioContext para se conectar ao áudio
+    // Adicionar um evento de clique para criar e iniciar o áudio com interação do usuário
+    document.addEventListener('click', handleUserInteraction, { once: true });
+};
+
+function handleUserInteraction() {
+    // Criar o AudioContext após a interação do usuário
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const track = audioContext.createMediaElementSource(audioElement);
     track.connect(audioContext.destination);
 
-    // Tentar reproduzir o áudio automaticamente
-    playAudio();
-};
-
-function playAudio() {
+    // Iniciar o AudioContext e tocar o áudio
     audioContext.resume().then(() => {
-        audioElement.play().then(() => {
-            console.log("Áudio reproduzido com sucesso.");
-        }).catch(error => {
-            console.error("Erro ao reproduzir áudio:", error);
-            // Exibir alerta se a reprodução automática falhar
-            alert("Não foi possível reproduzir o áudio automaticamente. Clique para permitir a reprodução.");
-            // Adicionar um evento de clique para tentar a reprodução novamente
-            document.addEventListener('click', handleUserInteraction, { once: true });
-        });
-    });
-}
-
-function handleUserInteraction() {
-    // Resumir o contexto de áudio e tentar tocar novamente após interação
-    audioContext.resume().then(() => {
-        audioElement.play().then(() => {
-            console.log("Áudio reproduzido com sucesso após interação.");
-        }).catch(error => {
-            console.error("Erro ao reproduzir áudio após interação:", error);
-        });
+        return audioElement.play();
+    }).then(() => {
+        console.log("Áudio reproduzido com sucesso após interação.");
+    }).catch(error => {
+        console.error("Erro ao reproduzir áudio após interação:", error);
     });
 }
