@@ -18,8 +18,8 @@
 const appversion = "0.3.27";
 const sipjsversion = "0.20.0";
 const navUserAgent = window.navigator.userAgent;  // TODO: change to Navigator.userAgentData
-//const instanceID = String(Date.now());
-//const localDB = window.localStorage;
+const instanceID = String(Date.now());
+const localDB = window.localStorage;
 
 // Set the following to null to disable
 let welcomeScreen = "<div class=\"UiWindowField\"><pre style=\"font-size: 12px\">";
